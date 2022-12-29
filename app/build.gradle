@@ -75,12 +75,16 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
-    implementation "io.ktor:ktor-server-netty:1.6.0"
-//    implementation 'io.ktor:ktor-server-content-negotiation:2.2.1'
+    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-host-common-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-cors-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation-jvm:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm:$ktor_version")
+    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
 
     implementation "ch.qos.logback:logback-classic:1.2.11"
 
-    // Ktor Client : Server 작동 안 함 > Retrofit 으로 변경
+    // Ktor Client : Server 에서 작동 안 함 > Retrofit 으로 변경
 //    def ktor_version = '2.2.1'
 //    implementation "io.ktor:ktor-client-core:$ktor_version"
 //    implementation "io.ktor:ktor-client-content-negotiation:$ktor_version"
@@ -91,7 +95,7 @@ dependencies {
 
     // Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'
+//    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'
 
     // ROOM
     implementation "androidx.room:room-runtime:2.4.3"

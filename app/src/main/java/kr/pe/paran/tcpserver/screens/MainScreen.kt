@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -22,12 +23,22 @@ import kr.pe.paran.tcpserver.model.ServerState
 fun MainScreen(viewModel: MainViewModel) {
 
     val context = LocalContext.current
+
     val publicAddress by viewModel.publicAddress.collectAsState()
     val deviceAddress by viewModel.deviceAddress.collectAsState()
+
     val serverState by viewModel.serverState.collectAsState()
     val logDataList by viewModel.logDataList.collectAsState()
 
+    val listState = rememberLazyListState()
+
     LaunchedEffect(key1 = Unit, block = { viewModel.getAddress() })
+
+    LaunchedEffect(key1 = logDataList, block = {
+        if (logDataList.isNotEmpty()) {
+            listState.animateScrollToItem(logDataList.lastIndex)
+        }
+    })
 
     Scaffold(
         modifier = Modifier
@@ -59,7 +70,10 @@ fun MainScreen(viewModel: MainViewModel) {
                 Text(text = if (serverState == ServerState.RUN) "STOP" else "START")
             }
             Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn(modifier = Modifier.weight(1f)) {
+            LazyColumn(
+                state = listState,
+                modifier = Modifier.weight(1f)
+            ) {
                 items(items = logDataList) {
                     Text(
                         text = it.getLog(),
@@ -68,6 +82,7 @@ fun MainScreen(viewModel: MainViewModel) {
                 }
             }
             Text(
+                modifier = Modifier.padding(top = 8.dp),
                 text = "STATE : ${serverState.message}",
                 fontSize = 14.sp
             )

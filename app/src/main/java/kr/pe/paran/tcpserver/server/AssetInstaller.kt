@@ -1,12 +1,13 @@
-package kr.pe.paran.tcpserver
+package kr.pe.paran.tcpserver.server
 
 import android.content.Context
 import android.content.res.AssetManager
-import android.util.Log
+import kr.pe.paran.tcpserver.MainViewModel
+import kr.pe.paran.tcpserver.model.LogData
 import java.io.File
 import java.io.FileOutputStream
 
-class AssetInstaller(viewModel: MainViewModel) {
+class AssetInstaller(private val viewModel: MainViewModel) {
 
     fun install(context: Context, sourceDirectory: String = "", targetDirectory: String) {
         recursiveCopy(context.assets, sourceDirectory, targetDirectory)
@@ -21,12 +22,12 @@ class AssetInstaller(viewModel: MainViewModel) {
             val targetPath = "$target/$filename"
 
             if ((assetManager.list(filepath) == null) || (assetManager.list(filepath)?.size == 0)) {
-
                 copyFile(assetManager, filepath, targetPath)
+                viewModel.log(LogData(message = "$filepath File Copy..."))
             } else {
-                Log.i(":::::", "$filepath is a directory.")
                 createDirectory(targetPath)
                 recursiveCopy(assetManager, filepath, targetPath)
+                viewModel.log(LogData(message = "$targetPath Directory Copy..."))
             }
         }
     }

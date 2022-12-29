@@ -5,8 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kr.pe.paran.tcpserver.respository.database.model.TestData
-import java.net.IDN
+import kr.pe.paran.tcpserver.model.TestData
 
 @Dao
 interface TestDao {

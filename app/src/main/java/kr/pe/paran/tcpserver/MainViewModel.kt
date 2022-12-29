@@ -7,16 +7,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 import kr.pe.paran.tcpserver.common.utils.NetworkUtils
 import kr.pe.paran.tcpserver.model.LogData
 import kr.pe.paran.tcpserver.model.ServerState
-import kr.pe.paran.tcpserver.plugins.Router
-import java.util.*
+import kr.pe.paran.tcpserver.server.AssetInstaller
+import kr.pe.paran.tcpserver.server.Server
 
 class MainViewModel: ViewModel() {
 
-    private var router: Router? = null
+    private var server: Server? = null
     private val assetInstaller: AssetInstaller = AssetInstaller(this)
 
     private var _publicAddress = MutableStateFlow("")
@@ -42,9 +41,9 @@ class MainViewModel: ViewModel() {
 
     fun start(context: Context) {
         val staticFileDirectory = context.filesDir.absolutePath
-        if (router == null) {
+        if (server == null) {
             _serverState.value = ServerState.INIT
-            router = Router(context = context)
+            server = Server(context = context)
 
             viewModelScope.launch {
                 assetInstaller.install(
@@ -54,14 +53,14 @@ class MainViewModel: ViewModel() {
                 )
             }
         }
-        router!!.startServer(staticFileDirectory, "")
+        server!!.startServer(staticFileDirectory, "")
         _serverState.value = ServerState.RUN
         log(LogData(message = "Server Run"))
     }
 
     fun stop() {
-        router?.stopServer()
-        router = null
+        server?.stopServer()
+        server = null
         _serverState.value = ServerState.STOP
         log(LogData(message = "Server Stop"))
     }

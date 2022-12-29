@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import kr.pe.paran.tcpserver.common.Constants
 import kr.pe.paran.tcpserver.respository.database.dao.TestDao
-import kr.pe.paran.tcpserver.respository.database.model.TestData
+import kr.pe.paran.tcpserver.model.TestData
 
 @Database(
     entities = [TestData::class],

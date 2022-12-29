@@ -1,10 +1,10 @@
-package kr.pe.paran.tcpserver.router
+package kr.pe.paran.tcpserver.server.routers
 
 import android.util.Log
-import io.ktor.application.*
 import io.ktor.http.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import java.io.File
 
 fun Routing.static(
@@ -12,11 +12,12 @@ fun Routing.static(
     parentPath: String,
     url: String
 ) {
-
     File(path).listFiles()?.forEach { file ->
+
         if (file.isDirectory) {
             val routeUrl = url + file.absolutePath.substring(parentPath.length) + "/{filename}"
             Log.i(":::::", routeUrl)
+
             this.get(routeUrl) {
                 val fileName = call.parameters["filename"]
                 val targetFile = File("${file.absolutePath}/$fileName")
@@ -27,6 +28,7 @@ fun Routing.static(
                 }
 
             }
+
             static(file.absolutePath, parentPath, url)
         }
     }
