@@ -15,7 +15,7 @@ fun Route.test(
     route("/test") {
         get("/{uuid}") {
             val uid = call.parameters["uuid"] ?: UUID.randomUUID().toString()
-            val testData = repository.getTestData(uid = uid) ?: TestData()
+            val testData = repository.getTestData(uid = uid) ?: TestData(uid = "")
             call.respond(testData)
         }
 
