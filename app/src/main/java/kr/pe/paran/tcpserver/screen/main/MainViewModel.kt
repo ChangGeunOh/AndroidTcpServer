@@ -1,6 +1,8 @@
-package kr.pe.paran.tcpserver
+package kr.pe.paran.tcpserver.screen.main
 
 import android.content.Context
+import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +15,15 @@ import kr.pe.paran.tcpserver.model.ServerState
 import kr.pe.paran.tcpserver.server.AssetInstaller
 import kr.pe.paran.tcpserver.server.Server
 
-class MainViewModel: ViewModel() {
+class MainViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
+
+//    private val context = getApplication<Application>().applicationContext
+
+    init {
+        Log.i(":::::MainViewModel", savedStateHandle.toString())
+    }
 
     private var server: Server? = null
     private val assetInstaller: AssetInstaller = AssetInstaller(this)
@@ -49,7 +59,7 @@ class MainViewModel: ViewModel() {
                 assetInstaller.install(
                     context = context,
                     sourceDirectory = "",
-                    targetDirectory =  staticFileDirectory
+                    targetDirectory = staticFileDirectory
                 )
             }
         }
@@ -67,5 +77,11 @@ class MainViewModel: ViewModel() {
 
     fun log(logData: LogData) {
         _logDataList.value += logData
+    }
+
+    fun onSavedSateHandle() {
+        savedStateHandle["PARAMETER"] = "TEST_VALUE"
+        val parameter = savedStateHandle.get<String>("PARAMETER")
+        Log.i(":::::", "value>${parameter}")
     }
 }

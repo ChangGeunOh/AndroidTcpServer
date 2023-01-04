@@ -1,4 +1,4 @@
-package kr.pe.paran.tcpserver.screens
+package kr.pe.paran.tcpserver.screen.main
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -6,24 +6,30 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material.Button
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kr.pe.paran.tcpserver.MainViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import kr.pe.paran.tcpserver.model.ServerState
+import kr.pe.paran.tcpserver.navigation.Screen
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun MainScreen(viewModel: MainViewModel) {
+fun MainScreen(
+    navController: NavController,
+    viewModel: MainViewModel = viewModel()
+) {
+
 
     val context = LocalContext.current
-
     val publicAddress by viewModel.publicAddress.collectAsState()
     val deviceAddress by viewModel.deviceAddress.collectAsState()
 
@@ -43,11 +49,46 @@ fun MainScreen(viewModel: MainViewModel) {
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color(0xFF121212))
-            .padding(vertical = 8.dp, horizontal = 16.dp)
+            .background(Color(0xFF121212)),
+        topBar = {
+            TopAppBar(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                title = {
+                    Text("Android TCP Server")
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            viewModel.onSavedSateHandle()
+                            navController.navigate("setting_screen/fiveroot")
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Settings Icon"
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            navController.navigate(Screen.QrCodeScreen.passQrCode("publicAddress"))
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.QrCode,
+                            contentDescription = "Settings Icon"
+                        )
+                    }
+                }
+            )
+        }
 
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(vertical = 8.dp, horizontal = 16.dp),
+        ) {
 
             Text(
                 text = "Public IP : $publicAddress",

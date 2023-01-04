@@ -2,7 +2,7 @@ package kr.pe.paran.tcpserver.server
 
 import android.content.Context
 import android.content.res.AssetManager
-import kr.pe.paran.tcpserver.MainViewModel
+import kr.pe.paran.tcpserver.screen.main.MainViewModel
 import kr.pe.paran.tcpserver.model.LogData
 import java.io.File
 import java.io.FileOutputStream
